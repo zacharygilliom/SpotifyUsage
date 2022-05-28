@@ -1,6 +1,6 @@
 import spotipy
 import sys
-sys.path.append('/home/zach/programming/python/SpotifyUsage/internal')
+sys.path.append('../internal')
 import creds 
 from spotipy.oauth2 import SpotifyClientCredentials
 
