@@ -50,7 +50,7 @@ class Database:
                 conn.commit()
                 conn.close()
 
-    def insert(self):
+    def insert(self, song, band):
         params = {
                 'dbname': self.dbname,
                 'user': self.user,
@@ -61,7 +61,7 @@ class Database:
         with psycopg.connect(**params) as conn:
             with conn.cursor() as cur:
                 cur.execute("INSERT INTO songs (name,band) VALUES(%s,%s)",
-                    ("Little Dark Age", "MGMT"))
+                    (song, band))
                 conn.commit()
                 conn.close()
         
@@ -78,7 +78,7 @@ if __name__ == '__main__':
    
     db = Database(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
     db.create_tables()
-    db.insert()
+    db.insert("Breezeblocks", "Alt-J")
     db.query()
 
 
