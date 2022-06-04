@@ -16,9 +16,8 @@ def get_recently_played_tracks(sp_client, db):
     db.insert_new_songs(id_list)
 
 def get_recently_played_audio_features(sp_client, db):
-    no_features_list = db.query_songs_no_features()
-    results = sp_client.audio_features(no_features_list)
-    return null
+    results = sp_client.audio_features(db.query_songs_no_features())
+    db.insert_audio_features(results)
 
 if __name__ == '__main__':
 
@@ -28,13 +27,6 @@ if __name__ == '__main__':
     
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri="http://localhost:8080/callback",scope=scope))
     
-    #features =  sp.audio_features(id_list)
-    #print(features[0])
-    #print("*************************************************")
-    #print(features[1])
     db = Database(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
     get_recently_played_tracks(sp, db)
     get_recently_played_audio_features(sp, db)
-    #db.insert_songs(id_list)
-    #db.insert("Breezeblocks", "Alt-J")
-    #db.drop("songs")
