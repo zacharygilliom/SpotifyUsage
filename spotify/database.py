@@ -45,13 +45,14 @@ class Database:
                 conn.commit()
                 conn.close()
 
-    def query(self, table):
+    def query(self):
         with psycopg.connect(**self.params) as conn:
             with conn.cursor() as cur:
-                cur.execute(f"SELECT * FROM {table}")
+                cur.execute("""SELECT p.played_at, s.name, s.artist, af.energy
+                               FROM songs s
+                               LEFT JOIN played p ON s.spotify_id = p.spotify_id
+                               LEFT JOIN audio_features af ON s.spotify_id = af.spotify_id""")
                 rows = cur.fetchall()
-                for row in rows:
-                    print(row)
                 conn.commit()
                 conn.close()
                 return rows
@@ -63,7 +64,9 @@ class Database:
                 rows = cur.fetchall()
                 conn.commit()
                 conn.close()
-                return [row[0] for row in rows]
+                if len(rows) >0:
+                    return [row[0] for row in rows]
+                return []
 
     def insert_new_songs(self, song_list):
         with psycopg.connect(**self.params) as conn:
