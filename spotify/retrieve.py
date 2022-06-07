@@ -6,10 +6,11 @@ import creds
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 from database import Database
+from layout import Graph
 from dash import Dash, html, dcc
 import plotly.express as px
 import pandas as pd
-import psycopg
+#import psycopg
 
 def initialize_app():
     scope = "user-read-recently-played"
@@ -19,7 +20,8 @@ def initialize_app():
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri="http://localhost:8080/callback",scope=scope))
 
     db = Database(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
-    return sp, db
+    graphs = Graph(db)
+    return sp, db, graphs
 
 def get_recently_played_tracks(sp_client, db):
     results = sp_client.current_user_recently_played(limit=50)
@@ -43,12 +45,7 @@ def get_bar_graph_data(db):
     df.sort_values(by=['energy'], inplace=True, ascending=False)
     return df
 
-def make_figure(df):
-    fig = px.bar(df, x="artist", y="energy")
-    return fig
-
-def layout(app, df):
-    fig = make_figure(df)
+def layout(app, graphs):
     app.layout = html.Div(children=[
         html.H1(children="Hello Dash"),
         html.Div(children='''
@@ -57,17 +54,17 @@ def layout(app, df):
 
         dcc.Graph(
             id='example-graph',
-            figure=fig
+            figure=graphs.weekly_time_series()
         )
     ])
 
 def main():
     app = Dash(__name__)
-    sp, db = initialize_app()
+    sp, db, graphs = initialize_app()
     get_recently_played_tracks(sp, db)
     get_recently_played_audio_features(sp, db)
     df = get_bar_graph_data(db)
-    layout(app, df)
+    layout(app, graphs)
     app.run_server(debug=True)
 
 if __name__ == '__main__':

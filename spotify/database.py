@@ -57,6 +57,20 @@ class Database:
                 conn.close()
                 return rows
 
+    def query_time_series(self):
+        with psycopg.connect(**self.params) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                               SELECT to_char(p.played_at, 'Day') AS Day, avg(af.danceability), avg(af.energy), avg(af.loudness), avg(af.speechiness), avg(af.acousticness), avg(af.instrumentalness),
+                                avg(af.liveness), avg(af.valence), avg(af.tempo)
+                                    FROM played p
+                                    LEFT JOIN audio_features af ON p.spotify_id = af.spotify_id
+                                    GROUP BY Day""")
+                rows = cur.fetchall()
+                conn.commit()
+                conn.close()
+                return rows
+
     def query_songs_no_features(self):
         with psycopg.connect(**self.params) as conn:
             with conn.cursor() as cur:
