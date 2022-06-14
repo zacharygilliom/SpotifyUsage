@@ -1,29 +1,25 @@
-#FROM python:3-alpine
-#FROM frolvlad/alpine-miniconda3
-FROM nickgryg/alpine-pandas
+FROM zacharygilliom/spotifybackend
 
 RUN mkdir spotifyusage/
 
 WORKDIR spotifyusage/
 
-#COPY requirements.txt spotifyusage/requirements.txt
-
 COPY . .
 
 RUN \
-	apk add --no-cache --update \
-	python3 python3-dev gcc \
-	gfortran musl-dev g++ libffi-dev \
-	openssl-dev libxml2 libxml2-dev \
-	libxslt libxslt-dev libjpeg-turbo-dev zlib-dev \
-	libpq postgresql-dev bash && \
+	apk add --no-cache --upgrade rsyslog && \
 	pip install --upgrade pip && \
 	pip install --upgrade cython && \
 	pip install -r requirements.txt && \
 	chmod +x spotify/backend/retrieve.py && \
-	chmod +x spotify/backend/update.py
+	chmod +x spotify/backend/update.py && \
+	touch /var/log/cron.log
 
-RUN echo "*/5 * * * * bash /spotify/backend/retrieve.py" >> newcron
-RUN echo "* */1 * * * bash /spotify/backend/update.py" >> newcron
+RUN echo "*/5 * * * * bash /spotify/backend/retrieve.py" >> newcron 2>&1
+RUN echo "* */1 * * * bash /spotify/backend/update.py" >> newcron 2>&1
 RUN crontab newcron
-CMD ["python3", "spotify/dashboard/app.py"]
+
+EXPOSE 8050
+
+#CMD ["python3", "spotify/dashboard/app.py"]
+CMD ["crond", "-L", "/var/log/cron.log"]
