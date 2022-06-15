@@ -1,5 +1,6 @@
 import sys
 import os
+#TODO: Fix the path to work inside the docker container.
 sys.path.append(f'{os.getcwd()}/spotify/backend')
 sys.path.append(f'{os.getcwd()}/internal')
 import creds
@@ -37,4 +38,4 @@ if __name__ == '__main__':
     db = Database(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
     graphs = Graph(db)
     layout(app, graphs)
-    app.run_server(debug=True)
+    app.run_server(host="0.0.0.0", debug=True)

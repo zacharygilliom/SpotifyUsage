@@ -13,13 +13,13 @@ RUN \
 	pip install -r requirements.txt && \
 	chmod +x spotify/backend/retrieve.py && \
 	chmod +x spotify/backend/update.py && \
+	chmod +x scripts.sh && \
 	touch /var/log/cron.log
 
-RUN echo "*/5 * * * * bash /spotify/backend/retrieve.py" >> newcron 2>&1
-RUN echo "* */1 * * * bash /spotify/backend/update.py" >> newcron 2>&1
+RUN echo "*/5 * * * * bash /home/spotifyusage/spotify/backend/retrieve.py" >> newcron 2>&1
+RUN echo "* */1 * * * bash /home/spotifyusage/spotify/backend/update.py" >> newcron 2>&1
 RUN crontab newcron
 
 EXPOSE 8050
 
-#CMD ["python3", "spotify/dashboard/app.py"]
-CMD ["crond", "-L", "/var/log/cron.log"]
+CMD ["./scripts.sh"]

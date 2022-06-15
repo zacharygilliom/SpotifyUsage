@@ -1,6 +1,7 @@
 import spotipy
 import sys
 import os
+#TODO: Fix the appended path to work inside the docker container. i.e. their is a dir called spotifyusage now
 sys.path.append(f'{os.getcwd()}/internal')
 import creds
 from spotipy.oauth2 import SpotifyClientCredentials
