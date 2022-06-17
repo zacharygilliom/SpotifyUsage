@@ -16,8 +16,8 @@ RUN \
 	chmod +x scripts.sh && \
 	touch /var/log/cron.log
 
-RUN echo "*/1 * * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/retrieve.py" >> newcron 2>&1
-RUN echo "* */1 * * * /usr/bin/env pyton3 /home/spotifyusage/spotify/backend/update.py" >> newcron 2>&1
+RUN echo "*/5 * * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/retrieve.py" >> newcron
+RUN echo "0 */1 * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/update.py" >> newcron
 ADD oauth2.py /usr/local/lib/python3.10/site-packages/spotipy/
 RUN crontab newcron
 
