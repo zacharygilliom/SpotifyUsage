@@ -12,3 +12,10 @@ class Graph:
         df = pd.DataFrame(rows, columns=['Day', 'danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo'])
         fig = px.bar(df, x='Day', y=['energy', 'liveness', 'speechiness'], barmode='group')
         return fig
+
+    def unique_songs_day(self):
+        rows = self.db.query_unique_songs_by_day()
+        df = pd.DataFrame(rows, columns=['Day', 'tempo_range', 'count'])
+        print(df)
+        fig = px.bar(df, x='Day', y='count', color='tempo_range')
+        return fig

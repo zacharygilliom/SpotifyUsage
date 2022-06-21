@@ -71,6 +71,33 @@ class Database:
                 conn.close()
                 return rows
 
+    def query_unique_songs_by_day(self):
+        with psycopg.connect(**self.params) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                            SELECT tempo_range.Day, tempo_range.tempo_range, COUNT(*) FROM (
+                                SELECT to_char(p.played_at, 'Day') AS Day,
+                                    CASE WHEN af.tempo < 80 THEN 'Under 80'
+                                        WHEN af.tempo BETWEEN 81 AND 90 THEN '80s'
+                                        WHEN af.tempo BETWEEN 91 AND 100 THEN '90s'
+                                        WHEN af.tempo BETWEEN 101 AND 110 THEN '100s'
+                                        WHEN af.tempo BETWEEN 111 AND 120 THEN '110s'
+                                        WHEN af.tempo BETWEEN 121 AND 130 THEN '120s'
+                                        WHEN af.tempo BETWEEN 131 AND 140 THEN '130s'
+                                        WHEN af.tempo BETWEEN 141 AND 150 THEN '140s'
+                                        WHEN af.tempo > 151 THEN 'Over 150'
+                                        WHEN af.tempo is NULL THEN '0s'
+                                    END AS tempo_range
+                                FROM played p
+                                    LEFT JOIN audio_features af
+                                        ON p.spotify_id = af.spotify_id
+                            ) tempo_range GROUP BY tempo_range.Day, tempo_range.tempo_range
+                           """)
+                rows = cur.fetchall()
+                conn.commit()
+                conn.close()
+                return rows
+
     def query_songs_no_features(self):
         with psycopg.connect(**self.params) as conn:
             with conn.cursor() as cur:

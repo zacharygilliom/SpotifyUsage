@@ -29,6 +29,10 @@ def layout(app, graphs):
         dcc.Graph(
             id='example-graph',
             figure = graphs.weekly_time_series()
+        ),
+        dcc.Graph(
+            id='unique-graph',
+            figure = graphs.unique_songs_day()
         )
     ])
     return
