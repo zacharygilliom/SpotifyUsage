@@ -16,6 +16,11 @@ class Graph:
     def unique_songs_day(self):
         rows = self.db.query_unique_songs_by_day()
         df = pd.DataFrame(rows, columns=['Day', 'tempo_range', 'count'])
-        print(df)
+        df.columns = df.columns.str.strip()
+        for idx, row in df.iterrows():
+            if row['tempo_range'] == None:
+                df.at[idx, 'tempo_range'] = 0
+            new_val = row['Day'].strip()
+            df.at[idx, 'Day'] = new_val
         fig = px.bar(df, x='Day', y='count', color='tempo_range')
         return fig
