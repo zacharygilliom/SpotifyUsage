@@ -32,7 +32,7 @@ def layout(app, graphs):
         ),
         dcc.Graph(
             id='unique-graph',
-            figure = graphs.unique_songs_day()
+            figure = graphs.unique_songs_day_tempo()
         )
     ])
     return

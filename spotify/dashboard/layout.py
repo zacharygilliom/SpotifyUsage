@@ -13,7 +13,7 @@ class Graph:
         fig = px.bar(df, x='Day', y=['energy', 'liveness', 'speechiness'], barmode='group')
         return fig
 
-    def unique_songs_day(self):
+    def unique_songs_day_tempo(self):
         rows = self.db.query_unique_songs_by_day()
         df = pd.DataFrame(rows, columns=['Day', 'tempo_range', 'count'])
         df.columns = df.columns.str.strip()
