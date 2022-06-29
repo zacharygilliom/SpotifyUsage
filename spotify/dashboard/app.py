@@ -6,11 +6,14 @@ sys.path.append(f'{os.getcwd()}/internal')
 import creds
 from database import Database
 from dash import Dash, html, dcc
+import dash_bootstrap_components as dbc
 from layout import Graph
 import psycopg
 import pandas as pd
 
-app = Dash(__name__)
+external_stylesheet = [dbc.themes.DARKLY]
+
+app = Dash(__name__, external_stylesheets=external_stylesheet)
 
 def time_series_features(db):
     rows = db.query_time_series()
@@ -21,11 +24,11 @@ def time_series_features(db):
 
 def layout(app, graphs):
     app.layout = html.Div(children=[
-        html.H1(children='Hello Dash'),
-
+            html.H1(children='Hello Dash', style={'textAlign':'center'}
+        ),
         html.Div(children='''
             Dash: A web application framework for your data
-        '''),
+            ''', style={'textAlign':'center'}),
         dcc.Graph(
             id='example-graph',
             figure = graphs.weekly_time_series()

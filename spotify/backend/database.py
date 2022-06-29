@@ -78,14 +78,14 @@ class Database:
                             SELECT tempo_range.Day, tempo_range.tempo_range, COUNT(*) FROM (
                                 SELECT to_char(p.played_at, 'Day') AS Day,
                                     CASE WHEN af.tempo < 80 THEN 'Under 80'
-                                        WHEN af.tempo BETWEEN 81 AND 90 THEN '80s'
-                                        WHEN af.tempo BETWEEN 91 AND 100 THEN '90s'
-                                        WHEN af.tempo BETWEEN 101 AND 110 THEN '100s'
-                                        WHEN af.tempo BETWEEN 111 AND 120 THEN '110s'
-                                        WHEN af.tempo BETWEEN 121 AND 130 THEN '120s'
-                                        WHEN af.tempo BETWEEN 131 AND 140 THEN '130s'
-                                        WHEN af.tempo BETWEEN 141 AND 150 THEN '140s'
-                                        WHEN af.tempo > 151 THEN 'Over 150'
+                                        WHEN af.tempo BETWEEN 80 AND 90 THEN '80s'
+                                        WHEN af.tempo BETWEEN 90 AND 100 THEN '90s'
+                                        WHEN af.tempo BETWEEN 100 AND 110 THEN '100s'
+                                        WHEN af.tempo BETWEEN 110 AND 120 THEN '110s'
+                                        WHEN af.tempo BETWEEN 120 AND 130 THEN '120s'
+                                        WHEN af.tempo BETWEEN 130 AND 140 THEN '130s'
+                                        WHEN af.tempo BETWEEN 140 AND 150 THEN '140s'
+                                        WHEN af.tempo > 150 THEN 'Over 150'
                                         WHEN af.tempo is NULL THEN '0s'
                                     END AS tempo_range
                                 FROM played p
