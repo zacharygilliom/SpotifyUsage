@@ -40,9 +40,13 @@ def layout(app, graphs):
     ])
     return
 #TODO: Add callbacks to update the graphs on intervals 
-if __name__ == '__main__':
+
+def main():
     DBNAME, USER, PASSWORD, HOST, PORT = creds.get_db_credentials()
     db = Database(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
     graphs = Graph(db)
     layout(app, graphs)
     app.run_server(host="0.0.0.0", debug=True)
+
+if __name__ == '__main__':
+    main()
