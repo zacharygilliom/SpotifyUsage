@@ -25,3 +25,9 @@ class Graph:
             df.at[idx, 'Day'] = new_val
         fig = px.bar(df, x='Day', y='count', color='tempo_range', template='plotly_dark')
         return fig
+
+    def count_songs_day(self):
+        rows = self.db.query_count_songs_day()
+        df = pd.DataFrame(rows)
+        fig = px.line(df, x='Day', y='count', title='Number of Unique Songs Played per Day')
+        return fig

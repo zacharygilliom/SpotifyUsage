@@ -98,6 +98,20 @@ class Database:
                 conn.close()
                 return rows
 
+    def query_count_songs_day(self):
+        with psycopg.connect(**self.params) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                            SELECT to_char(p.played_at, 'MON-DD') AS Day, COUNT(DISTINCT p.spotify_id)
+                            FROM played p
+                            WHERE p.played_at > CURRENT_DATE - 7
+                            GROUP BY Day
+                        """)
+                rows = cur.fetchall()
+                conn.commit()
+                conn.close()
+                return rows
+
     def query_songs_no_features(self):
         with psycopg.connect(**self.params) as conn:
             with conn.cursor() as cur:
@@ -140,6 +154,7 @@ class Database:
                                      song['instrumentalness'], song['liveness'], song['valence'], song['tempo'], song['id']))
                 conn.commit()
                 conn.close()
+
 
     def drop(self, table):
         with psycopg.connect(**self.params) as conn:

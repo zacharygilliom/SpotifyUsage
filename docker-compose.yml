@@ -3,7 +3,6 @@ version: '2'
 services:
   backend:
     build: .
-    image: spotifyusage
     ports:
     - "8080:8080"
     - "8050:8050"
