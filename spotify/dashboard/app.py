@@ -36,7 +36,16 @@ def layout(app, graphs):
         dcc.Graph(
             id='unique-graph',
             figure = graphs.unique_songs_day_tempo()
+        ),
+        dcc.Graph(
+            id='line-graph',
+            figure = graphs.count_songs_day()
+        ),
+        dcc.Graph(
+            id='artist-graph',
+            figure = graphs.song_count_by_artist()
         )
+
     ])
     return
 #TODO: Add callbacks to update the graphs on intervals 
