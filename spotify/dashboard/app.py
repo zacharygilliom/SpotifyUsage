@@ -55,7 +55,7 @@ def main():
     db = Database(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
     graphs = Graph(db)
     layout(app, graphs)
-    app.run_server(host="0.0.0.0", debug=True)
+    app.run_server(port=8011, debug=True)
 
 if __name__ == '__main__':
     main()
