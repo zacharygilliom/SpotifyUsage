@@ -5,6 +5,7 @@ RUN mkdir spotifyusage/
 WORKDIR spotifyusage/
 
 COPY . .
+COPY backend-cron /etc/cron.d/backend-cron
 
 RUN \
 	apk add --no-cache --upgrade rsyslog vim && \
@@ -17,10 +18,8 @@ RUN \
 	touch /var/log/cron.log && \
 	mv oauth2.py /usr/local/lib/python3.10/site-packages/spotipy/
 
-RUN echo "*/5 * * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/retrieve.py" >> newcron
-RUN echo "0 */1 * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/update.py" >> newcron
-RUN crontab newcron
-
+RUN chmod 0644 /etc/cron.d/backend-cron
+RUN crontab /etc/cron.d/backend-cron
 
 EXPOSE 8050
 EXPOSE 8080

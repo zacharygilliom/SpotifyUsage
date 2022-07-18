@@ -1,0 +1,2 @@
+*/5 * * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/retrieve.py >> /var/log/cron.log 2>&1
+0 */1 * * * /usr/bin/env python3 /home/spotifyusage/spotify/backend/update.py >> /var/log/cron.log 2>&1
