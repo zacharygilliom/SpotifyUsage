@@ -39,6 +39,5 @@ class Graph:
     def song_count_by_artist(self):
         rows = self.db.query_count_artist()
         df = pd.DataFrame(rows, columns=['Artist', 'Count'])
-        fig = px.bar(df, x='Artist', y='Count', template='plotly_dark')
-        print(df)
+        fig = px.bar(df, x='Count', y='Artist', template='plotly_dark', orientation='h', title='Number of Unique Songs Played by Artist')
         return fig
